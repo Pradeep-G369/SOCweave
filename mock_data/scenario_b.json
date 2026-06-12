@@ -1,0 +1,51 @@
+{
+  "alert_id": "ALERT-B-001",
+  "severity": "HIGH",
+  "title": "Unusual outbound data transfer - ASSET-12 - 3:17 AM",
+  "timestamp": "2026-06-14T03:17:00Z",
+  "asset": "ASSET-12",
+  "details": "Large outbound data transfer detected from ASSET-12 to unrecognized external IP 185.220.101.47, 37 minutes after last user login.",
+  "foundry_iq": {
+    "cve_matches": ["CVE-2024-3094"],
+    "threat_intel_matches": ["185.220.101.47 matches known C2 infrastructure"],
+    "external_ip_contacted": true,
+    "citations": [
+      "MITRE ATT&CK T1041: Exfiltration Over C2 Channel - matched destination IP",
+      "ThreatFeed: 185.220.101.47 flagged as active C2 server (last seen 3 days ago)",
+      "NVD CVE-2024-3094: Known supply-chain backdoor matches binary signature on ASSET-12",
+      "ThreatFeed: IP geolocation - non-business region, no prior org traffic history"
+    ]
+  },
+  "fabric_iq": {
+    "asset": "ASSET-12",
+    "connected_systems": ["CUSTOMER-DB-PARTITION-3", "AUTH-SERVICE-02", "API-GATEWAY-01"],
+    "blast_radius": "3 connected systems including customer PII database partition",
+    "owners": ["Platform-Team", "DataOps-Team"],
+    "graph": {
+      "nodes": ["ASSET-12", "CUSTOMER-DB-PARTITION-3", "AUTH-SERVICE-02", "API-GATEWAY-01"],
+      "edges": [["ASSET-12","CUSTOMER-DB-PARTITION-3"], ["ASSET-12","AUTH-SERVICE-02"], ["ASSET-12","API-GATEWAY-01"]]
+    },
+    "citations": [
+      "Fabric Graph: ASSET-12 connects directly to CUSTOMER-DB-PARTITION-3 (PII data)",
+      "Fabric Graph: ASSET-12 connects to AUTH-SERVICE-02 and API-GATEWAY-01",
+      "Fabric Graph: CUSTOMER-DB-PARTITION-3 owner = DataOps-Team (no maintenance window logged)"
+    ]
+  },
+  "work_iq": {
+    "tickets": [],
+    "emails": [],
+    "citations": [
+      "M365 Tickets: Zero open or scheduled tickets reference ASSET-12",
+      "Outlook/Teams: Zero messages authorizing outbound transfer from ASSET-12",
+      "M365 Audit Log: Last interactive login on ASSET-12 was 37 minutes before transfer started",
+      "M365 Audit Log: No scheduled jobs configured for ASSET-12 at 3:17 AM"
+    ]
+  },
+  "expected_verdict": {
+    "severity_before": "HIGH",
+    "severity_after": "CRITICAL",
+    "status": "CONFIRMED THREAT - ESCALATE IMMEDIATELY",
+    "confidence": 97,
+    "summary": "Outbound transfer to known C2 server matches CVE-2024-3094 backdoor. Customer PII database partition is reachable. No authorization found. Action: Isolate ASSET-12, rotate credentials, notify DataOps-Team."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "nodes": [
+    {"id": "ASSET-07", "type": "server", "label": "ASSET-07 (File Server)"},
+    {"id": "ASSET-12", "type": "server", "label": "ASSET-12 (App Server)"},
+    {"id": "BACKUP-ARRAY-01", "type": "storage", "label": "Backup Array 01"},
+    {"id": "CUSTOMER-DB-PARTITION-3", "type": "database", "label": "Customer DB Partition 3"},
+    {"id": "AUTH-SERVICE-02", "type": "service", "label": "Auth Service 02"},
+    {"id": "API-GATEWAY-01", "type": "service", "label": "API Gateway 01"},
+    {"id": "FIREWALL-EDGE-01", "type": "network", "label": "Edge Firewall"},
+    {"id": "MONITORING-HUB", "type": "service", "label": "Monitoring Hub"}
+  ],
+  "edges": [
+    ["ASSET-07", "BACKUP-ARRAY-01"],
+    ["ASSET-12", "CUSTOMER-DB-PARTITION-3"],
+    ["ASSET-12", "AUTH-SERVICE-02"],
+    ["ASSET-12", "API-GATEWAY-01"],
+    ["API-GATEWAY-01", "FIREWALL-EDGE-01"],
+    ["MONITORING-HUB", "ASSET-07"],
+    ["MONITORING-HUB", "ASSET-12"]
+  ]
+}

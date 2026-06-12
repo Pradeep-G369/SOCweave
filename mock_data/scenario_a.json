@@ -1,0 +1,60 @@
+{
+  "alert_id": "ALERT-A-001",
+  "severity": "CRITICAL",
+  "title": "Mass File Deletion & Zip detected on ASSET-07",
+  "timestamp": "2026-06-14T02:00:00Z",
+  "asset": "ASSET-07",
+  "details": "Multiple .zip archives created, source files deleted in bulk on ASSET-07.",
+  "foundry_iq": {
+    "cve_matches": [],
+    "threat_intel_matches": [],
+    "external_ip_contacted": false,
+    "citations": [
+      "NVD: No matching CVE for bulk zip/delete pattern on this OS build",
+      "MITRE ATT&CK: No matching technique for outbound exfil (no external IP found)",
+      "ThreatFeed: ASSET-07 IP not on any blocklist"
+    ]
+  },
+  "fabric_iq": {
+    "asset": "ASSET-07",
+    "connected_systems": ["BACKUP-ARRAY-01"],
+    "blast_radius": "1 machine, internal backup array only, no lateral spread",
+    "owners": ["IT-Infra-Team"],
+    "graph": {
+      "nodes": ["ASSET-07", "BACKUP-ARRAY-01"],
+      "edges": [["ASSET-07", "BACKUP-ARRAY-01"]]
+    },
+    "citations": [
+      "Fabric Graph: ASSET-07 has single edge to BACKUP-ARRAY-01",
+      "Fabric Graph: No edges to customer-facing or external subnets"
+    ]
+  },
+  "work_iq": {
+    "tickets": [
+      {
+        "id": "IT-4821",
+        "title": "Scheduled archive compression - ASSET-07 - 02:00 AM tonight",
+        "status": "Approved"
+      }
+    ],
+    "emails": [
+      {
+        "from": "Admin_Ganesh",
+        "time": "2026-06-13T16:00:00Z",
+        "subject": "Tonight's maintenance",
+        "body": "Moving legacy data archives to backup storage tonight at 2:00 AM."
+      }
+    ],
+    "citations": [
+      "M365 Ticket #IT-4821: Scheduled archive compression approved for ASSET-07 at 02:00 AM",
+      "Outlook Email from Admin_Ganesh (4:00 PM): Confirms legacy archive move to backup tonight at 2AM"
+    ]
+  },
+  "expected_verdict": {
+    "severity_before": "CRITICAL",
+    "severity_after": "LOW",
+    "status": "AUTHORIZED MAINTENANCE",
+    "confidence": 94,
+    "summary": "Admin_Ganesh scheduled archive compression at 2AM. No external data transfer detected. Action: None."
+  }
+}
