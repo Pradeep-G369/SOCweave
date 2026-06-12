@@ -15,6 +15,9 @@ export default function App() {
   const intervalRef = useRef(null);
 
   const runScenario = async (name) => {
+    // Clear any previous interval
+    if (intervalRef.current) clearInterval(intervalRef.current);
+
     setLoading(true);
     setResult(null);
     setActiveScenario(name);
@@ -27,6 +30,11 @@ export default function App() {
 
     try {
       const data = await fetchScenario(name);
+      // Ensure stopwatch runs for at least 1 second so it's visible
+      const elapsed = Date.now() - startTime;
+      if (elapsed < 1000) {
+        await new Promise((resolve) => setTimeout(resolve, 1000 - elapsed));
+      }
       setResult(data);
     } catch (err) {
       console.error(err);
