@@ -251,6 +251,13 @@ By eliminating false-positive investigation fatigue, SOCweave directly addresses
 - Deploy as a Hosted Agent in Foundry Agent Service for production scale
 
 ---
+### Swapping Mock Data for Live APIs
+Each IQ agent (`foundry_iq.py`, `fabric_iq.py`, `work_iq.py`) reads from
+`alert_data["foundry_iq"]` etc. — a real integration replaces this with a
+live call (Azure AI Search for Foundry IQ, Fabric REST API for Fabric IQ,
+Microsoft Graph API for Work IQ) while keeping the same return shape
+(`findings`, `citations`, signal score), so the orchestrator and Verdict
+Synthesizer require no changes.
 
 ## 📄 License
 
