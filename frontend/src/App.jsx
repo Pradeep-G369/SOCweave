@@ -102,10 +102,8 @@ export default function App() {
           </div>
 
           <AlertBanner verdict={result.verdict} />
-          <AlertBanner verdict={result.verdict} />
           <AnalystReasoning verdict={result.verdict} />
-          <ConfidenceBar confidence={result.verdict.confidence} />
-          <ConfidenceBar confidence={result.verdict.confidence} />
+          <ConfidenceBar confidence={result.verdict.confidence} severity={result.verdict.severity_after} />
           <ReasoningTrace plan={result.plan} auditTrail={result.audit_trail} />
           <AuditTrail agents={result.agents} />
           <BlastRadiusMap graph={result.agents.fabric_iq.graph} asset={result.verdict.asset} />

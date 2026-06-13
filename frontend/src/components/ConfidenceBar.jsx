@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function ConfidenceBar({ confidence }) {
+export default function ConfidenceBar({ confidence, severity }) {
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
@@ -9,9 +9,10 @@ export default function ConfidenceBar({ confidence }) {
     return () => clearTimeout(timer);
   }, [confidence]);
 
-  let colorClass = "bg-threat";
-  if (confidence > 70) colorClass = "bg-safe";
-  else if (confidence > 40) colorClass = "bg-progress";
+  // Color reflects severity outcome, not just confidence magnitude
+  let colorClass = "bg-progress";
+  if (severity === "LOW" || severity === "MEDIUM") colorClass = "bg-safe";
+  else if (severity === "HIGH" || severity === "CRITICAL") colorClass = "bg-threat";
 
   return (
     <div className="mt-3">
