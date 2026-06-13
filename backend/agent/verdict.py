@@ -137,7 +137,14 @@ def _build_reasoning_chain(foundry_result: dict, fabric_result: dict, work_resul
     parts.append(f"Human/organizational context reveals: {w_finding}.")
 
     # Concluding synthesis
-    if severity_after in ("LOW", "MEDIUM"):
+    if confidence < 70:
+        parts.append(
+            f"Combining these three independent signals, the evidence is ambiguous "
+            f"with only {confidence}% confidence — the activity is plausible but "
+            f"unconfirmed, and the Critic agent recommends continued monitoring "
+            f"and analyst review rather than automatic closure or escalation."
+        )
+    elif severity_after in ("LOW", "MEDIUM"):
         parts.append(
             f"Combining these three independent signals, the evidence converges on a "
             f"low-risk explanation with {confidence}% confidence — recommending no "

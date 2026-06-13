@@ -17,7 +17,6 @@ export default function App() {
   const intervalRef = useRef(null);
 
   const runScenario = async (name) => {
-    // Clear any previous interval
     if (intervalRef.current) clearInterval(intervalRef.current);
 
     setLoading(true);
@@ -32,7 +31,6 @@ export default function App() {
 
     try {
       const data = await fetchScenario(name);
-      // Ensure stopwatch runs for at least 1 second so it's visible
       const elapsed = Date.now() - startTime;
       if (elapsed < 1000) {
         await new Promise((resolve) => setTimeout(resolve, 1000 - elapsed));
@@ -58,7 +56,7 @@ export default function App() {
       </header>
 
       {/* Scenario buttons */}
-      <div className="flex gap-3 mb-6">
+      <div className="flex gap-3 mb-6 flex-wrap">
         <button
           onClick={() => runScenario("a")}
           disabled={loading}
@@ -74,6 +72,14 @@ export default function App() {
           className="px-4 py-2 bg-threat text-white rounded-md text-sm font-medium hover:opacity-90 disabled:opacity-50"
         >
           ▶ Run Scenario B (Real Threat)
+        </button>
+        <button
+          onClick={() => runScenario("c")}
+          disabled={loading}
+          aria-label="Run Scenario C: Ambiguous Insider Activity"
+          className="px-4 py-2 bg-progress text-white rounded-md text-sm font-medium hover:opacity-90 disabled:opacity-50"
+        >
+          ▶ Run Scenario C (Ambiguous Activity)
         </button>
 
         {/* Stopwatch */}

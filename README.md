@@ -58,7 +58,7 @@ Every alert is resolved end-to-end — from raw alert to verified verdict with r
 
 ---
 
-## 🎬 Dual-Scenario Demo
+## 🎬 Scenario Suite
 
 SOCweave proves it **reasons contextually**, not just pattern-matches, by handling two opposite cases:
 
@@ -72,6 +72,18 @@ A **HIGH** "unusual outbound transfer" alert matches a known C2 server and CVE, 
 
 > **Verdict: HIGH → CRITICAL** | Confidence: **93%** | Status: `CONFIRMED THREAT — ESCALATE IMMEDIATELY`
 > Auto-generated remediation plan included.
+
+### 🟡 Scenario C — Ambiguous Insider Activity (Critic Loop Demo)
+An employee with legitimate database access logs in 4+ hours after their
+normal session ended — not clearly malicious, but anomalous. Initial
+confidence falls below the 70% threshold, **triggering SOCweave's Critic
+agent to simulate a re-query** for extended context before finalizing
+the verdict.
+
+> **Verdict: MEDIUM (unchanged)** | Confidence: **~65%** | Status: `REQUIRES ANALYST REVIEW`
+> This scenario demonstrates the **self-correction reasoning pattern** —
+> SOCweave doesn't just answer, it knows when it's *uncertain* and
+> double-checks itself.
 
 ## ✅ Evaluation Results
 

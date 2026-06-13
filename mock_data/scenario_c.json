@@ -1,0 +1,46 @@
+{
+  "alert_id": "ALERT-C-001",
+  "severity": "MEDIUM",
+  "title": "After-hours access to financial reporting system - ASSET-19",
+  "timestamp": "2026-06-14T22:45:00Z",
+  "asset": "ASSET-19",
+  "details": "Employee EMP-204 accessed FINANCE-DB-01 at 10:45 PM, outside normal working hours (9 AM - 6 PM). Downloaded a 45MB report file.",
+  "foundry_iq": {
+    "cve_matches": [],
+    "threat_intel_matches": [],
+    "external_ip_contacted": false,
+    "citations": [
+      "ThreatFeed: Source IP is internal corporate VPN range, not flagged",
+      "MITRE ATT&CK: Pattern partially matches T1078 (Valid Accounts) but insufficient indicators for high confidence"
+    ]
+  },
+  "fabric_iq": {
+    "asset": "ASSET-19",
+    "connected_systems": ["FINANCE-DB-01"],
+    "blast_radius": "1 connected system - financial reporting database",
+    "owners": ["Finance-Team"],
+    "graph": {
+      "nodes": ["ASSET-19", "FINANCE-DB-01"],
+      "edges": [["ASSET-19", "FINANCE-DB-01"]]
+    },
+    "citations": [
+      "Fabric Graph: ASSET-19 connects to FINANCE-DB-01 (financial data classification)",
+      "Fabric Graph: EMP-204 role = Financial Analyst, has standing access to FINANCE-DB-01"
+    ]
+  },
+  "work_iq": {
+    "tickets": [],
+    "emails": [],
+    "citations": [
+      "M365 Calendar: EMP-204 has no logged after-hours work pattern in past 30 days",
+      "M365 Audit Log: EMP-204 last interactive session ended at 6:12 PM same day"
+    ]
+  },
+  "expected_verdict": {
+    "severity_before": "MEDIUM",
+    "severity_after": "MEDIUM",
+    "status": "REQUIRES ANALYST REVIEW",
+    "confidence": 68,
+    "summary": "EMP-204 has legitimate access to FINANCE-DB-01 but accessed it 4+ hours after their normal session ended, with no scheduling pattern explaining it. Not clearly malicious, but anomalous. Critic loop triggered re-query for extended context."
+  }
+}
