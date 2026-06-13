@@ -108,13 +108,10 @@ This is the most important demo: confidence falls **below the 70% threshold**, *
 
 ## 📸 Screenshots
 
-**Scenario A — Authorized Maintenance (False Positive)**
-![Scenario A — Authorized Maintenance](docs/screenshot_a.png)
-**Scenario B — Confirmed Threat (Real Threat)**
-![Scenario B — Confirmed Threat](docs/screenshot_b.png)
-**Scenario C — Ambiguous Insider Activity (Critic Loop)**
-![Scenario C — Confirmed Threat](docs/screenshot_c.png)
-
+**SOCweave — SOCweave Interface**
+![SOCweave — SOCweave Interface](docs/SOCweave.png)
+**Scenario  — Main**
+![Scenario — Main Page](docs/SOCweave1.png)
 
 ---
 
