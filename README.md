@@ -178,6 +178,7 @@ By eliminating false-positive investigation fatigue, SOCweave directly addresses
 - **Mermaid.js** — blast radius diagrams
 - **Microsoft Presidio** — PII detection & scrubbing
 - Developed using **GitHub Copilot** in VS Code for AI-assisted development
+- **spaCy NLP (semantic similarity)** — powers the Analyst Co-Pilot's question understanding, fully offline
 
 ---
 

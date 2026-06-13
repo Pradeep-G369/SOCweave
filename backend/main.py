@@ -36,6 +36,17 @@ class AlertPayload(BaseModel):
     work_iq: dict | None = None
 
 
+class QuestionPayload(BaseModel):
+    question: str
+    context: dict
+
+
+@app.post("/ask")
+def ask_copilot(payload: QuestionPayload):
+    from agent.copilot import answer_question
+    return {"answer": answer_question(payload.question, payload.context)}
+
+
 @app.get("/health")
 def health():
     return {"status": "ok", "service": "SOCweave"}

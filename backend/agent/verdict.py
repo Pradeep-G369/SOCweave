@@ -72,6 +72,7 @@ def synthesize(alert_data: dict, foundry_result: dict, fabric_result: dict, work
         foundry_result["findings"] + fabric_result["findings"] + work_result["findings"]
     )
     summary = _build_summary(severity_after, status, findings_combined, confidence)
+    reasoning_chain = _build_reasoning_chain(foundry_result, fabric_result, work_result, severity_after, confidence)
 
     # --- Evidence count ---
     total_citations = (
@@ -102,6 +103,7 @@ def synthesize(alert_data: dict, foundry_result: dict, fabric_result: dict, work
         "confidence": confidence,
         "evidence_count": total_citations,
         "summary": summary,
+        "reasoning_chain": reasoning_chain,
         "remediation": remediation,
         "critic_notes": critic_notes,
     }
@@ -114,3 +116,38 @@ def _build_summary(severity_after: str, status: str, findings: list, confidence:
     line2 = findings[0] if findings else "Analysis complete."
     line3 = f"Confidence: {confidence}%"
     return f"{line1}\n{line2}\n{line3}"
+
+
+def _build_reasoning_chain(foundry_result: dict, fabric_result: dict, work_result: dict,
+                            severity_after: str, confidence: int) -> str:
+    """Builds a multi-sentence analytical explanation chaining evidence
+    across all three agents — simulates a senior analyst's reasoning."""
+    parts = []
+
+    # Foundry IQ contribution
+    f_finding = foundry_result["findings"][0]
+    parts.append(f"Technical analysis shows: {f_finding}.")
+
+    # Fabric IQ contribution
+    fab_finding = fabric_result["findings"][0]
+    parts.append(f"Infrastructure context adds: {fab_finding}.")
+
+    # Work IQ contribution
+    w_finding = work_result["findings"][0]
+    parts.append(f"Human/organizational context reveals: {w_finding}.")
+
+    # Concluding synthesis
+    if severity_after in ("LOW", "MEDIUM"):
+        parts.append(
+            f"Combining these three independent signals, the evidence converges on a "
+            f"low-risk explanation with {confidence}% confidence — recommending no "
+            f"escalation at this time."
+        )
+    else:
+        parts.append(
+            f"Combining these three independent signals, the evidence converges on a "
+            f"genuine threat with {confidence}% confidence — recommending immediate "
+            f"escalation and remediation."
+        )
+
+    return " ".join(parts)

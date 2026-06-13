@@ -6,6 +6,8 @@ import ReasoningTrace from "./components/ReasoningTrace";
 import AuditTrail from "./components/AuditTrail";
 import BlastRadiusMap from "./components/BlastRadiusMap";
 import VerdictCard from "./components/VerdictCard";
+import AnalystReasoning from "./components/AnalystReasoning";
+import CoPilot from "./components/CoPilot";
 
 export default function App() {
   const [result, setResult] = useState(null);
@@ -100,11 +102,15 @@ export default function App() {
           </div>
 
           <AlertBanner verdict={result.verdict} />
+          <AlertBanner verdict={result.verdict} />
+          <AnalystReasoning verdict={result.verdict} />
+          <ConfidenceBar confidence={result.verdict.confidence} />
           <ConfidenceBar confidence={result.verdict.confidence} />
           <ReasoningTrace plan={result.plan} auditTrail={result.audit_trail} />
           <AuditTrail agents={result.agents} />
           <BlastRadiusMap graph={result.agents.fabric_iq.graph} asset={result.verdict.asset} />
           <VerdictCard verdict={result.verdict} />
+          <CoPilot result={result} />
         </div>
       )}
 
