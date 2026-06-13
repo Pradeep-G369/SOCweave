@@ -42,6 +42,13 @@ A sixth component, the **Analyst Co-Pilot**, lets a human analyst ask follow-up 
 Every alert is resolved end-to-end — from raw alert to verified verdict with remediation steps — in **under 60 seconds**.
 
 ---
+## 🔍 How It Works — Visual Walkthrough (Scenario A)
+
+The diagram below walks through a real example end-to-end: a CRITICAL alert
+on `ASSET-07` is investigated by all five agents and correctly resolved as
+authorized maintenance with 91% confidence.
+
+![How SOCweave Works - Scenario A Walkthrough](docs/how_it_works.png)
 
 ## 🏗️ Architecture
                 ┌─────────────────────────┐
