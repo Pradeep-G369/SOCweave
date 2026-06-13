@@ -118,6 +118,8 @@ This is the most important demo: confidence falls **below the 70% threshold**, *
 
 ---
 
+## 🎬 Demo Video
+[Watch the demo on YouTube](https://youtu.be/jNmnG1klsSE)
 ## 🚀 Clone & Run
 
 ### 1. Clone this repository
