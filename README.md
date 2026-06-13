@@ -11,7 +11,7 @@
 ![React](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61DAFB)
 ![Accessibility](https://img.shields.io/badge/WCAG-2.1%20AA-blueviolet)
 ![Microsoft IQ](https://img.shields.io/badge/Microsoft%20IQ-Foundry%20%7C%20Fabric%20%7C%20Work-0078D4)
-![Eval](https://img.shields.io/badge/Eval-2%2F2%20Passing-success)
+![Eval](https://img.shields.io/badge/Eval-3%2F3%20Passing-success)
 
 </div>
 
@@ -19,7 +19,11 @@
 
 ## 🎯 The Problem
 
-SOC analysts spend **4–6 hours daily** investigating security alerts that turn out to be false positives — a major driver of analyst burnout. SOCweave eliminates that waste by reasoning like a senior analyst: cross-examining technical evidence with human and organizational context **before** reaching a verdict.
+SOC analysts spend **4–6 hours daily** investigating security alerts that turn out to be false positives — a major driver of analyst burnout. Every alert looks scary in isolation because it's judged purely on technical signals, with no awareness of *why* the activity happened or *who* it could really affect.
+
+**SOCweave fixes this** by reasoning like a senior analyst: cross-examining technical evidence, infrastructure impact, and human/organizational context — together — before reaching a verdict.
+
+---
 
 ## 🧠 What It Does
 
@@ -27,55 +31,58 @@ SOCweave is a **multi-agent reasoning system** with 5 distinct agent roles worki
 
 | # | Agent | Role |
 |---|---|---|
-| 1 | **Triage Orchestrator** | Plans the investigation — produces a visible "Reasoning Trace" |
-| 2 | **Foundry IQ Agent** | Grounds the alert against CVEs, MITRE ATT&CK, and threat intel — fully cited |
+| 1 | **Triage Orchestrator** | Plans the investigation — produces a visible "Reasoning Trace" before execution |
+| 2 | **Foundry IQ Agent** | Grounds the alert against CVEs, MITRE ATT&CK, and threat intel — every claim cited |
 | 3 | **Fabric IQ Agent** | Maps the infrastructure blast radius via a semantic ontology graph |
 | 4 | **Work IQ Agent** | Scans M365 emails/tickets for human authorization context |
-| 5 | **Verdict Synthesizer (Critic)** | Combines all signals into a confidence-scored verdict, with a self-correction loop when confidence is low |
-> The Analyst Co-Pilot uses **spaCy semantic similarity** (offline NLP)
-> to understand question *meaning*, not just keywords — e.g. "Should I be
-> worried?" correctly routes to the reasoning/evidence category.
+| 5 | **Verdict Synthesizer (Critic)** | Combines all signals into a confidence-scored verdict — and **re-queries itself** if confidence falls below 70% |
+
+A sixth component, the **Analyst Co-Pilot**, lets a human analyst ask follow-up questions about any verdict using offline semantic NLP.
+
 Every alert is resolved end-to-end — from raw alert to verified verdict with remediation steps — in **under 60 seconds**.
 
 ---
-## 🏗️ Architecture
 
-```
-                 ┌─────────────────────────┐
-                    │  TRIAGE ORCHESTRATOR     │
-                    │  (Planner)               │
-                    └─────────┬─────────────────┘
-                ┌──────────────┼──────────────┐
-        ┌───────▼─────┐ ┌──────▼──────┐ ┌─────▼──────┐
-        │ Foundry IQ   │ │ Fabric IQ   │ │ Work IQ    │
-        │ Agent        │ │ Agent       │ │ Agent      │
-        │ CVE/MITRE    │ │ Blast       │ │ Email/     │
-        │ grounded RAG │ │ radius graph│ │ ticket scan│
-        └───────┬─────┘ └──────┬──────┘ └─────┬──────┘
-                └──────────────┼──────────────┘
-                    ┌─────────▼─────────────┐
-                    │ VERDICT SYNTHESIZER    │
-                    │ (Critic/Verifier +     │
-                    │ confidence + severity) │
-                    │ — self-corrects if     │
-                    │   confidence < 70%     │
-                    └─────────┬─────────────┘
-                    ┌─────────▼─────────────┐
-                    │ ANALYST CO-PILOT       │
-                    │ (semantic Q&A over     │
-                    │  verdict context)      │
-                    └────────────────────────┘
-```
+## 🏗️ Architecture
+                ┌─────────────────────────┐
+                │  TRIAGE ORCHESTRATOR     │
+                │  (Planner)               │
+                └─────────┬─────────────────┘
+            ┌──────────────┼──────────────┐
+    ┌───────▼─────┐ ┌──────▼──────┐ ┌─────▼──────┐
+    │ Foundry IQ   │ │ Fabric IQ   │ │ Work IQ    │
+    │ Agent        │ │ Agent       │ │ Agent      │
+    │ CVE/MITRE    │ │ Blast       │ │ Email/     │
+    │ grounded RAG │ │ radius graph│ │ ticket scan│
+    └───────┬─────┘ └──────┬──────┘ └─────┬──────┘
+            └──────────────┼──────────────┘
+                ┌─────────▼─────────────┐
+                │ VERDICT SYNTHESIZER    │
+                │ (Critic/Verifier +     │
+                │  confidence + severity)│
+                │  self-corrects if      │
+                │  confidence < 70%      │
+                └─────────┬─────────────┘
+                ┌─────────▼─────────────┐
+                │ ANALYST CO-PILOT       │
+                │ (semantic Q&A over     │
+                │  verdict context)      │
+                └────────────────────────┘
+> 💡 The Analyst Co-Pilot uses **spaCy semantic similarity** (offline NLP) to
+> understand question *meaning*, not just keywords — e.g. "Should I be
+> worried about this?" correctly routes to the reasoning/evidence category
+> even though it shares no exact words with that category's reference text.
+
 ---
 
-## 🎬 Scenario Suite
+## 🎬 Scenario Suite — Three Demos, Three Reasoning Outcomes
 
-SOCweave proves it **reasons contextually**, not just pattern-matches, by handling two opposite cases:
+SOCweave proves it **reasons contextually**, not just pattern-matches, with three distinct cases covering the full decision space: clear false positive, clear true threat, and genuine ambiguity.
 
 ### 🟢 Scenario A — The False Positive
 A **CRITICAL** "mass file deletion" alert turns out to be authorized maintenance — confirmed by an IT helpdesk ticket and an admin email.
 
-> **Verdict: CRITICAL → LOW** | Confidence: **94%** | Status: `AUTHORIZED MAINTENANCE`
+> **Verdict: CRITICAL → LOW** | Confidence: **91%** | Status: `AUTHORIZED MAINTENANCE`
 
 ### 🔴 Scenario B — The Real Threat
 A **HIGH** "unusual outbound transfer" alert matches a known C2 server and CVE, with **zero** authorization found anywhere in the organization.
@@ -84,34 +91,20 @@ A **HIGH** "unusual outbound transfer" alert matches a known C2 server and CVE, 
 > Auto-generated remediation plan included.
 
 ### 🟡 Scenario C — Ambiguous Insider Activity (Critic Loop Demo)
-An employee with legitimate database access logs in 4+ hours after their
-normal session ended — not clearly malicious, but anomalous. Initial
-confidence falls below the 70% threshold, **triggering SOCweave's Critic
-agent to simulate a re-query** for extended context before finalizing
-the verdict.
+An employee with legitimate database access logs in 4+ hours after their normal session ended — not clearly malicious, but anomalous.
 
-> **Verdict: MEDIUM (unchanged)** | Confidence: **~65%** | Status: `REQUIRES ANALYST REVIEW`
-> This scenario demonstrates the **self-correction reasoning pattern** —
-> SOCweave doesn't just answer, it knows when it's *uncertain* and
-> double-checks itself.
+> **Verdict: MEDIUM (unchanged)** | Confidence: **65%** | Status: `MONITOR - LOW CONFIDENCE`
 
-## ✅ Evaluation Results
+This is the most important demo: confidence falls **below the 70% threshold**, **triggering SOCweave's Critic agent** to simulate a re-query for extended context before finalizing. SOCweave doesn't just answer — it knows when it's *uncertain* and says so, rather than forcing a confident-sounding but unjustified verdict.
 
-SOCweave includes an automated evaluation harness that validates verdict
-accuracy against expected outcomes for both scenarios.
-
-RESULT: 2/2 scenarios passed
-
-Run it yourself:
-```bash
-cd backend
-python eval/run_eval.py
-```
 ---
 
-## 📸 Screenshot
+## 📸 Screenshots
 
-![SOCweave Screenshot](docs/screenshot.png)
+![Scenario A — Authorized Maintenance](docs/screenshot_a.png)
+![Scenario B — Confirmed Threat](docs/screenshot_b.png)
+![Scenario C — Confirmed Threat](docs/screenshot_b.png)
+
 
 ---
 
@@ -148,7 +141,7 @@ npm install
 npm run dev
 ```
 
-Open **`http://localhost:5173`** and click either scenario button.
+Open **`http://localhost:5173`** and click any of the three scenario buttons.
 
 ---
 
@@ -167,12 +160,46 @@ Open **`http://localhost:5173`** and click either scenario button.
 | Feature | Judging Criterion | Weight |
 |---|---|---|
 | Foundry IQ CVE/MITRE grounding with citations | Accuracy & Relevance | 20% |
-| 5-agent reasoning chain + Critic self-correction loop | Reasoning & Multi-step Thinking | 20% |
-| Dual-scenario demo (false positive + real threat) | Creativity & Originality | 15% |
-| Reasoning Trace + Confidence Bar + Executive Callout | UX & Presentation | 15% |
-| Input sanitization, rate limiting, PII scrubbing (Presidio) | Reliability & Safety | 20% |
+| 5-agent reasoning chain + Critic self-correction loop (Scenario C) | Reasoning & Multi-step Thinking | 20% |
+| Three-scenario suite (false positive, true threat, ambiguous) | Creativity & Originality | 15% |
+| Reasoning Trace, Confidence Bar, Analyst Reasoning, Co-Pilot | UX & Presentation | 15% |
+| Input sanitization, rate limiting, PII scrubbing (Presidio), evaluation harness | Reliability & Safety | 20% |
 | Discord community sharing | Community Vote | 10% |
-| Critic self-correction loop (Scenario C) | Reasoning & Multi-step Thinking | 20% |
+
+---
+
+## ✅ Evaluation Results
+
+SOCweave includes an automated evaluation harness that validates verdict accuracy against expected outcomes for all three scenarios.
+SOCweave Evaluation Report
+✅ PASS — Scenario A
+
+Severity match : True
+
+Status match   : True
+
+Confidence     : expected 94%, actual 91% (diff: 3)
+✅ PASS — Scenario B
+
+Severity match : True
+
+Status match   : True
+
+Confidence     : expected 97%, actual 93% (diff: 4)
+✅ PASS — Scenario C
+
+Severity match : True
+
+Status match   : True
+
+Confidence     : expected 68%, actual 65% (diff: 3)
+==================================================
+RESULT: 3/3 scenarios passed
+Run it yourself:
+```bash
+cd backend
+python eval/run_eval.py
+```
 
 ---
 
@@ -201,8 +228,17 @@ By eliminating false-positive investigation fatigue, SOCweave directly addresses
 - **React + Vite + Tailwind CSS** — dark enterprise UI
 - **Mermaid.js** — blast radius diagrams
 - **Microsoft Presidio** — PII detection & scrubbing
-- Developed using **GitHub Copilot** in VS Code for AI-assisted development
 - **spaCy NLP (semantic similarity)** — powers the Analyst Co-Pilot's question understanding, fully offline
+- Developed using **GitHub Copilot** in VS Code for AI-assisted development
+
+---
+
+## 🔭 Future Work
+
+- Replace mock IQ data with live Microsoft Foundry IQ, Fabric, and Graph API connectors
+- Persist alert history and analyst feedback in a database for continuous evaluation
+- Parallelize the three IQ agent calls with `asyncio.gather()` for higher throughput
+- Deploy as a Hosted Agent in Foundry Agent Service for production scale
 
 ---
 
