@@ -16,7 +16,7 @@ MOCK_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "mock_data")
 
 def run_eval():
     results = []
-    for name in ["a", "b"]:
+    for name in ["a", "b", "c"]:
         with open(os.path.join(MOCK_DIR, f"scenario_{name}.json"), encoding="utf-8") as f:
             data = json.load(f)
 

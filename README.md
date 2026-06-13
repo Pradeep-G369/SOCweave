@@ -32,30 +32,40 @@ SOCweave is a **multi-agent reasoning system** with 5 distinct agent roles worki
 | 3 | **Fabric IQ Agent** | Maps the infrastructure blast radius via a semantic ontology graph |
 | 4 | **Work IQ Agent** | Scans M365 emails/tickets for human authorization context |
 | 5 | **Verdict Synthesizer (Critic)** | Combines all signals into a confidence-scored verdict, with a self-correction loop when confidence is low |
-
+> The Analyst Co-Pilot uses **spaCy semantic similarity** (offline NLP)
+> to understand question *meaning*, not just keywords — e.g. "Should I be
+> worried?" correctly routes to the reasoning/evidence category.
 Every alert is resolved end-to-end — from raw alert to verified verdict with remediation steps — in **under 60 seconds**.
 
 ---
-
 ## 🏗️ Architecture
-                ┌─────────────────────────┐
-                │  TRIAGE ORCHESTRATOR     │
-                │  (Planner)               │
-                └─────────┬─────────────────┘
-            ┌──────────────┼──────────────┐
-    ┌───────▼─────┐ ┌──────▼──────┐ ┌─────▼──────┐
-    │ Foundry IQ   │ │ Fabric IQ   │ │ Work IQ    │
-    │ Agent        │ │ Agent       │ │ Agent      │
-    │ CVE/MITRE    │ │ Blast       │ │ Email/     │
-    │ grounded RAG │ │ radius graph│ │ ticket scan│
-    └───────┬─────┘ └──────┬──────┘ └─────┬──────┘
-            └──────────────┼──────────────┘
-                ┌─────────▼─────────────┐
-                │ VERDICT SYNTHESIZER    │
-                │ (Critic/Verifier +     │
-                │ confidence + severity) │
-                └────────────────────────┘
 
+```
+                 ┌─────────────────────────┐
+                    │  TRIAGE ORCHESTRATOR     │
+                    │  (Planner)               │
+                    └─────────┬─────────────────┘
+                ┌──────────────┼──────────────┐
+        ┌───────▼─────┐ ┌──────▼──────┐ ┌─────▼──────┐
+        │ Foundry IQ   │ │ Fabric IQ   │ │ Work IQ    │
+        │ Agent        │ │ Agent       │ │ Agent      │
+        │ CVE/MITRE    │ │ Blast       │ │ Email/     │
+        │ grounded RAG │ │ radius graph│ │ ticket scan│
+        └───────┬─────┘ └──────┬──────┘ └─────┬──────┘
+                └──────────────┼──────────────┘
+                    ┌─────────▼─────────────┐
+                    │ VERDICT SYNTHESIZER    │
+                    │ (Critic/Verifier +     │
+                    │ confidence + severity) │
+                    │ — self-corrects if     │
+                    │   confidence < 70%     │
+                    └─────────┬─────────────┘
+                    ┌─────────▼─────────────┐
+                    │ ANALYST CO-PILOT       │
+                    │ (semantic Q&A over     │
+                    │  verdict context)      │
+                    └────────────────────────┘
+```
 ---
 
 ## 🎬 Scenario Suite

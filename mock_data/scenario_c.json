@@ -39,7 +39,7 @@
   "expected_verdict": {
     "severity_before": "MEDIUM",
     "severity_after": "MEDIUM",
-    "status": "REQUIRES ANALYST REVIEW",
+    "status": "MONITOR - LOW CONFIDENCE",
     "confidence": 68,
     "summary": "EMP-204 has legitimate access to FINANCE-DB-01 but accessed it 4+ hours after their normal session ended, with no scheduling pattern explaining it. Not clearly malicious, but anomalous. Critic loop triggered re-query for extended context."
   }
