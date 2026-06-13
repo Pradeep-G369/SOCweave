@@ -11,6 +11,7 @@
 ![React](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61DAFB)
 ![Accessibility](https://img.shields.io/badge/WCAG-2.1%20AA-blueviolet)
 ![Microsoft IQ](https://img.shields.io/badge/Microsoft%20IQ-Foundry%20%7C%20Fabric%20%7C%20Work-0078D4)
+![Eval](https://img.shields.io/badge/Eval-2%2F2%20Passing-success)
 
 </div>
 
@@ -72,6 +73,18 @@ A **HIGH** "unusual outbound transfer" alert matches a known C2 server and CVE, 
 > **Verdict: HIGH → CRITICAL** | Confidence: **93%** | Status: `CONFIRMED THREAT — ESCALATE IMMEDIATELY`
 > Auto-generated remediation plan included.
 
+## ✅ Evaluation Results
+
+SOCweave includes an automated evaluation harness that validates verdict
+accuracy against expected outcomes for both scenarios.
+
+RESULT: 2/2 scenarios passed
+
+Run it yourself:
+```bash
+cd backend
+python eval/run_eval.py
+```
 ---
 
 ## 📸 Screenshot
