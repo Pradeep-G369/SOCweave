@@ -5,3 +5,4 @@ pydantic
 presidio-analyzer
 presidio-anonymizer
 spacy
+pytest
