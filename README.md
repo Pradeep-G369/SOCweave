@@ -117,6 +117,7 @@ cd socweave
 ```bash
 bash run_demo.sh --scenario=a
 bash run_demo.sh --scenario=b
+bash run_demo.sh --scenario=c
 ```
 
 ### 3. Full interactive UI
@@ -161,6 +162,7 @@ Open **`http://localhost:5173`** and click either scenario button.
 | Reasoning Trace + Confidence Bar + Executive Callout | UX & Presentation | 15% |
 | Input sanitization, rate limiting, PII scrubbing (Presidio) | Reliability & Safety | 20% |
 | Discord community sharing | Community Vote | 10% |
+| Critic self-correction loop (Scenario C) | Reasoning & Multi-step Thinking | 20% |
 
 ---
 
