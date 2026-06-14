@@ -18,7 +18,6 @@ export default function App() {
 
   const runScenario = async (name) => {
     if (intervalRef.current) clearInterval(intervalRef.current);
-
     setLoading(true);
     setResult(null);
     setActiveScenario(name);
@@ -28,15 +27,6 @@ export default function App() {
     intervalRef.current = setInterval(() => {
       setStopwatch(((Date.now() - startTime) / 1000).toFixed(1));
     }, 100);
-    useEffect(() => {
-    const handleKey = (e) => {
-    if (e.altKey && e.key === "a") runScenario("a");
-    if (e.altKey && e.key === "b") runScenario("b");
-    if (e.altKey && e.key === "c") runScenario("c");
-    };
-  window.addEventListener("keydown", handleKey);
-  return () => window.removeEventListener("keydown", handleKey);
-}, []);
 
     try {
       const data = await fetchScenario(name);
@@ -55,7 +45,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-canvas text-textprimary p-6 max-w-4xl mx-auto">
-      {/* Header */}
       <header className="mb-6">
         <h1 className="text-2xl font-bold">🛡️ SOCweave</h1>
         <p className="text-textsecondary text-sm mt-1">
@@ -64,7 +53,6 @@ export default function App() {
         </p>
       </header>
 
-      {/* Scenario buttons */}
       <div className="flex gap-3 mb-6 flex-wrap">
         <button
           onClick={() => runScenario("a")}
@@ -91,7 +79,6 @@ export default function App() {
           ▶ Run Scenario C (Ambiguous Activity)
         </button>
 
-        {/* Stopwatch */}
         <div
           className="ml-auto flex items-center gap-2 px-3 py-2 border border-border rounded-md text-sm font-mono"
           aria-live="polite"
@@ -100,14 +87,12 @@ export default function App() {
         </div>
       </div>
 
-      {/* Loading state */}
       {loading && (
         <div className="text-center text-textsecondary py-8" role="status">
           Running multi-agent pipeline...
         </div>
       )}
 
-      {/* Results */}
       {result && !loading && (
         <div className="space-y-4">
           <div className="text-xs text-textsecondary">
@@ -115,7 +100,6 @@ export default function App() {
             <strong>{result.verdict.asset}</strong> | Total reasoning time:{" "}
             <strong>{result.total_elapsed_seconds}s</strong>
           </div>
-
           <AlertBanner verdict={result.verdict} />
           <AnalystReasoning verdict={result.verdict} />
           <ConfidenceBar confidence={result.verdict.confidence} severity={result.verdict.severity_after} />
@@ -127,7 +111,6 @@ export default function App() {
         </div>
       )}
 
-      {/* Empty state */}
       {!result && !loading && (
         <div className="text-center text-textsecondary py-12 border border-dashed border-border rounded-lg">
           Click a scenario above to see SOCweave's multi-agent reasoning in action.
