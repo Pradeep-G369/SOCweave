@@ -115,6 +115,9 @@ This is the most important demo: confidence falls **below the 70% threshold**, *
 [▶ Watch the full demo on YouTube](https://youtu.be/jNmnG1klsSE)
 
 ---
+## ⚡ Quick Preview
+
+![SOCweave Demo](docs/SOCweave.gif)
 
 ## 📸 Screenshots
 
