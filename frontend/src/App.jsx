@@ -28,6 +28,15 @@ export default function App() {
     intervalRef.current = setInterval(() => {
       setStopwatch(((Date.now() - startTime) / 1000).toFixed(1));
     }, 100);
+    useEffect(() => {
+    const handleKey = (e) => {
+    if (e.altKey && e.key === "a") runScenario("a");
+    if (e.altKey && e.key === "b") runScenario("b");
+    if (e.altKey && e.key === "c") runScenario("c");
+    };
+  window.addEventListener("keydown", handleKey);
+  return () => window.removeEventListener("keydown", handleKey);
+}, []);
 
     try {
       const data = await fetchScenario(name);

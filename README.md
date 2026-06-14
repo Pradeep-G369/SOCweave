@@ -154,6 +154,9 @@ cd backend
 pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 ```
+### 4. API Documentation (auto-generated)
+With the backend running, visit:
+`http://127.0.0.1:8000/docs` — interactive Swagger UI for all endpoints
 
 **Terminal 2 — Frontend:**
 ```bash
@@ -307,6 +310,18 @@ teams operating under constant high-alert volume.
 - Deploy as a Hosted Agent in Foundry Agent Service for production scale
 
 ---
+
+## 🔧 Troubleshooting
+
+| Issue | Solution |
+|---|---|
+| `Could not import module "main"` | Run `cd backend` first, then `uvicorn main:app` |
+| `ModuleNotFoundError: No module named 'agent'` | Ensure `.venv` is activated: `.venv\Scripts\activate` |
+| `npm error ENOENT package.json` | Run `cd frontend` first, then `npm run dev` |
+| Tailwind classes not applying | Check `tailwind.config.js` content paths include `./src/**/*.{js,jsx}` |
+| Mermaid diagram not rendering | Refresh the page — Mermaid sometimes needs a second load |
+| Presidio returns False | Run `python -m spacy download en_core_web_lg` in `.venv` |
+| Port 8000 already in use | Run `netstat -ano \| findstr :8000` then `taskkill /PID <id> /F` |
 
 ## 📄 License
 
