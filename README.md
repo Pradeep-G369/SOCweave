@@ -54,7 +54,7 @@ authorized maintenance with 91% confidence.
 ---
 
 ## 🏗️ Architecture
-┌─────────────────────────┐
+                ┌─────────────────────────┐
                 │  TRIAGE ORCHESTRATOR     │
                 │  (Planner)               │
                 └─────────┬─────────────────┘
