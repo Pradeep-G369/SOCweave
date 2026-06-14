@@ -2,7 +2,7 @@
 
 # 🛡️ SOCweave
 
-### Weaving threat intelligence, infrastructure data, and human context into one resolved verdict. Every time. Under 60 seconds.
+### Weaving threat intelligence, infrastructure data, and human context into one resolved verdict. Every time.
 
 **Built for Microsoft Agents League 2026 — Reasoning Agents Track**
 
@@ -12,6 +12,8 @@
 ![Accessibility](https://img.shields.io/badge/WCAG-2.1%20AA-blueviolet)
 ![Microsoft IQ](https://img.shields.io/badge/Microsoft%20IQ-Foundry%20%7C%20Fabric%20%7C%20Work-0078D4)
 ![Eval](https://img.shields.io/badge/Eval-3%2F3%20Passing-success)
+![Tests](https://img.shields.io/badge/Unit%20Tests-5%2F5%20Passing-success)
+![CI](https://github.com/Pradeep-G369/socweave/actions/workflows/eval.yml/badge.svg)
 
 </div>
 
@@ -39,9 +41,8 @@ SOCweave is a **multi-agent reasoning system** with 5 distinct agent roles worki
 
 A sixth component, the **Analyst Co-Pilot**, lets a human analyst ask follow-up questions about any verdict using offline semantic NLP.
 
-Every alert is resolved end-to-end — from raw alert to verified verdict with remediation steps — in **under 60 seconds**.
-
 ---
+
 ## 🔍 How It Works — Visual Walkthrough (Scenario A)
 
 The diagram below walks through a real example end-to-end: a CRITICAL alert
@@ -50,8 +51,10 @@ authorized maintenance with 91% confidence.
 
 ![How SOCweave Works - Scenario A Walkthrough](docs/how_it_works.png)
 
+---
+
 ## 🏗️ Architecture
-                ┌─────────────────────────┐
+┌─────────────────────────┐
                 │  TRIAGE ORCHESTRATOR     │
                 │  (Planner)               │
                 └─────────┬─────────────────┘
@@ -75,6 +78,7 @@ authorized maintenance with 91% confidence.
                 │ (semantic Q&A over     │
                 │  verdict context)      │
                 └────────────────────────┘
+
 > 💡 The Analyst Co-Pilot uses **spaCy semantic similarity** (offline NLP) to
 > understand question *meaning*, not just keywords — e.g. "Should I be
 > worried about this?" correctly routes to the reasoning/evidence category
@@ -106,17 +110,22 @@ This is the most important demo: confidence falls **below the 70% threshold**, *
 
 ---
 
-## 📸 Screenshots
+## 🎬 Demo Video
 
-**SOCweave — SOCweave Interface**
-![SOCweave — SOCweave Interface](docs/SOCweave.png)
-**Scenario  — Main**
-![Scenario — Main Page](docs/SOCweave1.png)
+[▶ Watch the full demo on YouTube](https://youtu.be/jNmnG1klsSE)
 
 ---
 
-## 🎬 Demo Video
-[Watch the demo on YouTube](https://youtu.be/jNmnG1klsSE)
+## 📸 Screenshots
+
+**Scenario A — Authorized Maintenance (False Positive, CRITICAL → LOW)**
+![Scenario A Result](docs/SOCweave.png)
+
+**Scenario B / C — Confirmed Threat & Ambiguous Activity**
+![Scenario B/C Result](docs/SOCweave1.png)
+
+---
+
 ## 🚀 Clone & Run
 
 ### 1. Clone this repository
@@ -179,7 +188,10 @@ Open **`http://localhost:5173`** and click any of the three scenario buttons.
 
 ## ✅ Evaluation Results
 
-SOCweave includes an automated evaluation harness that validates verdict accuracy against expected outcomes for all three scenarios.
+SOCweave includes an automated evaluation harness that validates verdict
+accuracy against expected outcomes for all three scenarios.
+==================================================
+
 SOCweave Evaluation Report
 ✅ PASS — Scenario A
 
@@ -203,6 +215,7 @@ Status match   : True
 
 Confidence     : expected 68%, actual 65% (diff: 3)
 ==================================================
+
 RESULT: 3/3 scenarios passed
 Run it yourself:
 ```bash
@@ -212,54 +225,86 @@ python eval/run_eval.py
 
 ---
 
+## 🧪 Unit Tests
+
+Individual agent modules are unit-tested in isolation to verify
+scoring logic independently of the end-to-end pipeline.
+eval/test_agents.py::test_foundry_iq_detects_cve_match        PASSED
+
+eval/test_agents.py::test_foundry_iq_no_match_low_signal       PASSED
+
+eval/test_agents.py::test_fabric_iq_blast_radius_scoring       PASSED
+
+eval/test_agents.py::test_work_iq_approved_ticket_raises_authorization PASSED
+
+eval/test_agents.py::test_work_iq_no_evidence_zero_authorization PASSED
+5 passed
+Run it yourself:
+```bash
+cd backend
+python -m pytest eval/test_agents.py -v
+```
+
+---
+
 ## 🔒 Data Safety & Privacy
 
-All data used is **100% synthetic** — fabricated for demo purposes, with no real PII, credentials, or customer data. `backend/safety/clean_data.py` uses **Microsoft Presidio** to automatically scrub names, emails, phone numbers, and IP addresses from human-context data before any agent processes it.
+All data used is **100% synthetic** — fabricated for demo purposes, with no
+real PII, credentials, or customer data. `backend/safety/clean_data.py` uses
+**Microsoft Presidio** to automatically scrub names, emails, phone numbers,
+and IP addresses from human-context data before any agent processes it.
 
 ## 🛡️ Input Security
 
-`backend/safety/sanitize.py` validates every incoming alert against a strict schema (required fields, valid severity enum) and applies an in-memory rate limit (10 requests/minute) before any processing begins.
+`backend/safety/sanitize.py` validates every incoming alert against a strict
+schema (required fields, valid severity enum) and applies an in-memory rate
+limit (10 requests/minute) before any processing begins.
+
+> **Note:** the current rate limiter is in-memory and scoped to a single
+> server instance. A production deployment would use Redis or Azure API
+> Management for distributed rate limiting.
 
 ## ♿ Accessibility
 
-SOCweave meets **WCAG 2.1 AA** standards: all interactive elements have ARIA labels, severity is communicated via icon + text (not color alone), confidence updates are screen-reader announced, and every component is keyboard-navigable.
+SOCweave meets **WCAG 2.1 AA** standards: all interactive elements have ARIA
+labels, severity is communicated via icon + text (not color alone), confidence
+updates are screen-reader announced, and every component is keyboard-navigable.
 
 ## 🌍 Social Impact
 
-By eliminating false-positive investigation fatigue, SOCweave directly addresses analyst burnout — a documented mental-health concern across SOC teams operating under constant high-alert volume.
+By eliminating false-positive investigation fatigue, SOCweave directly
+addresses analyst burnout — a documented mental-health concern across SOC
+teams operating under constant high-alert volume.
 
 ---
 
 ## 🛠️ Technologies Used
 
-- **Microsoft Foundry IQ, Fabric IQ, Work IQ** — simulated via structured data representing realistic agentic retrieval responses
+- **Microsoft Foundry IQ, Fabric IQ, Work IQ** — simulated via structured
+  data representing realistic agentic retrieval responses
 - **Python FastAPI** — multi-agent orchestration backend
 - **React + Vite + Tailwind CSS** — dark enterprise UI
 - **Mermaid.js** — blast radius diagrams
 - **Microsoft Presidio** — PII detection & scrubbing
-- **spaCy NLP (semantic similarity)** — powers the Analyst Co-Pilot's question understanding, fully offline
+- **spaCy NLP (semantic similarity)** — powers the Analyst Co-Pilot's
+  question understanding, fully offline
 - Developed using **GitHub Copilot** in VS Code for AI-assisted development
 
 ---
 
 ## 🔭 Future Work
 
-- Replace mock IQ data with live Microsoft Foundry IQ, Fabric, and Graph API connectors
-- Persist alert history and analyst feedback in a database for continuous evaluation
-- Parallelize the three IQ agent calls with `asyncio.gather()` for higher throughput
+- Replace mock IQ data with live Microsoft Foundry IQ, Fabric, and Graph
+  API connectors — see [INTEGRATION.md](INTEGRATION.md) for the step-by-step
+  guide
+- Persist alert history and analyst feedback in a database for continuous
+  evaluation
+- Parallelize the three IQ agent calls with `asyncio.gather()` for higher
+  throughput
 - Deploy as a Hosted Agent in Foundry Agent Service for production scale
 
 ---
-### Swapping Mock Data for Live APIs
-Each IQ agent (`foundry_iq.py`, `fabric_iq.py`, `work_iq.py`) reads from
-`alert_data["foundry_iq"]` etc. — a real integration replaces this with a
-live call (Azure AI Search for Foundry IQ, Fabric REST API for Fabric IQ,
-Microsoft Graph API for Work IQ) while keeping the same return shape
-(`findings`, `citations`, signal score), so the orchestrator and Verdict
-Synthesizer require no changes.
 
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
-
-</div>
